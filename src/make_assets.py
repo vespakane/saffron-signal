@@ -19,7 +19,6 @@ def circle(im, r=None, pad=0):
     alpha=np.clip(r+0.5-d,0,1)
     rgba=np.dstack([np.array(im),(alpha*255).round().astype(np.uint8)]); return Image.fromarray(rgba,'RGBA')
 # --- list screen (white bg) ---
-out['status']=uri(mask(L.crop((825,68,1092,126)),255))                  # 89x19.3pt
 out['btn_dots']=uri(L.crop((38,176,190,344)))                            # 50.7x56pt opaque
 out['btn_cam']=uri(L.crop((848,176,1000,344)))
 out['btn_plus']=uri(L.crop((1016,176,1168,344)))

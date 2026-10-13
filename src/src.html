@@ -12,7 +12,7 @@
 <style>
 /* Every position below is measured from the reference screenshots (1206x2622 @3x -> 402x874pt). 1 CSS px = 1pt. */
 :root{
-  --top:env(safe-area-inset-top,0px);   /* where the status bar ends; replaced by 59px inside the desktop iPhone frame */
+  --top:env(safe-area-inset-top,0px);   /* where the phone status bar ends; 59px inside the desktop iPhone frame */
   --white:#ffffff;
   --beige:#f3f1eb;
   --ink:#0a0a0a;
@@ -38,17 +38,12 @@ img{display:block;user-select:none;-webkit-user-select:none}
 #stage{position:relative;width:100%;height:100%}
 #phone{position:absolute;left:0;top:0;width:100%;height:100%}
 #app{position:absolute;inset:0;background:var(--white);overflow:hidden}
-.statusbar{display:none}
 @media (min-width:600px) and (min-height:500px){
   body{background:#161616}
   #phone{left:50%;top:50%;width:402px;height:874px;transform:translate(-50%,-50%) scale(var(--scale,1));transform-origin:center}
   #phone::before{content:"";position:absolute;inset:-14px;border-radius:69px;background:#101010;box-shadow:0 0 0 2px #2a2a2a,0 30px 80px rgba(0,0,0,.6)}
   #app{border-radius:55px;--top:59px}
   .island{position:absolute;left:50%;top:11px;width:126px;height:37px;border-radius:19px;background:#000;transform:translateX(-50%);z-index:30;pointer-events:none}
-  .statusbar{display:block;position:absolute;left:0;top:0;width:100%;height:59px;z-index:29;pointer-events:none}
-  .statusbar .time{position:absolute;left:49px;top:20.9px;font-size:19px;font-weight:600;line-height:normal;letter-spacing:-.2px;display:flex;align-items:center;gap:5.3px}
-  .statusbar .time::after{content:"";width:14.67px;height:14.67px;border-radius:50%;background:#000;margin-top:1px}
-  .statusbar .icons{position:absolute;left:275px;top:22.67px;width:89px;height:19.33px}
 }
 .screen{position:absolute;inset:0;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
 #list{background:var(--white)}
@@ -208,7 +203,6 @@ img{display:block;user-select:none;-webkit-user-select:none}
 <body>
 <div id="stage"><div id="phone"><div id="app">
   <div class="island"></div>
-  <div class="statusbar"><div class="time" id="clock">9:41</div><span class="icons mask" style="color:#000;-webkit-mask-image:url({{status}});mask-image:url({{status}})"></span></div>
 
   <!-- ===== Chats list ===== -->
   <section class="screen" id="list">
@@ -520,9 +514,6 @@ $('#menu-rename-me').addEventListener('click',()=>{ menu.hidden=true;
 $('#btn-cam-list').addEventListener('click',()=>toast('Open a chat to send a photo.'));
 document.querySelectorAll('.tabhit').forEach(t=>t.addEventListener('click',()=>toast(t.dataset.tab+' is not part of this clone.')));
 
-/* clock in the desktop frame */
-function clock(){ const d=new Date(); $('#clock').textContent=d.getHours()+':'+String(d.getMinutes()).padStart(2,'0'); }
-clock(); setInterval(clock,15000);
 /* scale the phone frame to the window */
 function fit(){ const s=Math.min(1,(window.innerHeight-40)/874,(window.innerWidth-40)/402); document.getElementById('phone').style.setProperty('--scale',s); }
 fit(); window.addEventListener('resize',fit);
