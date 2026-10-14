@@ -18,15 +18,26 @@ def circle(im, r=None, pad=0):
     yy,xx=np.mgrid[0:h,0:w]; d=np.sqrt((xx+.5-w/2)**2+(yy+.5-h/2)**2)
     alpha=np.clip(r+0.5-d,0,1)
     rgba=np.dstack([np.array(im),(alpha*255).round().astype(np.uint8)]); return Image.fromarray(rgba,'RGBA')
+def unwhite(im):
+    """pixels drawn over pure white -> RGBA with the white matte removed (shadows become translucent black,
+    colours are kept), so the asset can sit on any light background"""
+    c=np.array(im.convert('RGB')).astype(float)
+    alpha=np.clip((255-c).max(axis=2)/255,0,1)
+    a=alpha[...,None]
+    rgb=np.where(a>0,(c-(1-a)*255)/np.where(a>0,a,1),0)
+    rgba=np.dstack([np.clip(rgb,0,255).round().astype(np.uint8),(alpha*255).round().astype(np.uint8)])
+    return Image.fromarray(rgba,'RGBA')
 # --- list screen (white bg) ---
-out['btn_dots']=uri(L.crop((38,176,190,344)))                            # 50.7x56pt opaque
-out['btn_cam']=uri(L.crop((848,176,1000,344)))
-out['btn_plus']=uri(L.crop((1016,176,1168,344)))
+# header buttons: keep only the 136px circle (r=68, centred at 75.5,75.5) so they sit on any background colour
+def btn(box): im=L.crop(box); return circle(im, r=68)
+out['btn_dots']=uri(btn((38,176,190,344)))                               # 50.7x56pt, transparent outside the circle
+out['btn_cam']=uri(btn((848,176,1000,344)))
+out['btn_plus']=uri(btn((1016,176,1168,344)))
 out['avatar']=uri(circle(L.crop((48,692,216,860))))                      # 56pt
 out['search']=uri(mask(L.crop((88,544,141,597)),246))                    # 17.7pt
 out['ticks']=uri(mask(L.crop((250,766,311,808)),255,114))               # 20.3x14pt mask (blue 52,121,243)
 out['lock']=uri(mask(L.crop((106,1204,141,1248)),255,107))              # 11.7x14.7pt
-out['meta']=uri(L.crop((980,2150,1206,2410)))                            # 75.3x86.7pt
+out['meta']=uri(unwhite(L.crop((980,2150,1206,2410))))                   # 75.3x86.7pt, white matte removed
 # tab bar: erase the Chats icon + badge, keeping the pill's rounded edge (240x163 stadium, r=81.5)
 tb=np.array(L.crop((0,2330,1206,2622))).astype(float)
 X0,X1,Y0,Y1=770,930,2383,2486
@@ -46,7 +57,7 @@ for y in range(Y0,Y1):
     for x in range(X0,X1):
         c=pill_cov(x,y); row[x]=pillcol*c+barcol*(1-c)
 tb=tb.round().astype(np.uint8)
-out['tabbar']=uri(Image.fromarray(tb))                                    # 402x97.3pt
+out['tabbar']=uri(unwhite(Image.fromarray(tb)))   # white matte removed
 # --- chat screen (beige 243,241,235) ---
 out['chevron']=uri(mask(C.crop((76,218,118,286)),249))                   # 14x22.7pt
 out['plus']=uri(mask(C.crop((34,2413,106,2485)),243))                    # 24pt

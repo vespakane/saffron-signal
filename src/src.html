@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Chats">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#faf7f1">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="icon" type="image/png" href="favicon.png">
 <title>Supplier Chats</title>
@@ -15,6 +15,7 @@
 :root{
   --top:env(safe-area-inset-top,0px);   /* where the phone status bar ends; 59px inside the desktop iPhone frame */
   --white:#ffffff;
+  --bar:#faf7f1;      /* WhatsApp header band colour (sampled from the real app) - app base background */
   --beige:#f3f1eb;
   --ink:#0a0a0a;
   --grey:#6a6c6c;
@@ -28,8 +29,8 @@
   color-scheme:light;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0;background:var(--white)}
-body{height:100dvh;background:var(--white);font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden;font-variant-numeric:tabular-nums}
+html,body{height:100%;margin:0;background:var(--bar)}
+body{height:100dvh;background:var(--bar);font-family:var(--font);color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden;font-variant-numeric:tabular-nums}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
 button:focus-visible,textarea:focus-visible,input:focus-visible{outline:none}
 img{display:block;user-select:none;-webkit-user-select:none}
@@ -38,7 +39,7 @@ img{display:block;user-select:none;-webkit-user-select:none}
 /* ----- phone / app shell ----- */
 #stage{position:relative;width:100%;height:100%}
 #phone{position:absolute;left:0;top:0;width:100%;height:100%}
-#app{position:absolute;inset:0;background:var(--white);overflow:hidden}
+#app{position:absolute;inset:0;background:var(--bar);overflow:hidden}
 @media (min-width:600px) and (min-height:500px){
   body{background:#161616}
   #phone{left:50%;top:50%;width:402px;height:874px;transform:translate(-50%,-50%) scale(var(--scale,1));transform-origin:center}
@@ -48,8 +49,8 @@ img{display:block;user-select:none;-webkit-user-select:none}
 }
 .screen{position:absolute;inset:0;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
 /* solid white under the phone status bar so iOS 26 has nothing to blur/glass over there */
-#safe-top{position:absolute;left:0;right:0;top:0;height:var(--top);background:var(--white);z-index:20;pointer-events:none}
-#list{background:var(--white)}
+#safe-top{position:absolute;left:0;right:0;top:0;height:var(--top);background:var(--bar);z-index:20;pointer-events:none}
+#list{background:var(--bar)}
 #chat{background:var(--beige);transform:translateX(100%)}
 #app.in-chat #chat{transform:none}
 #app.in-chat #list{transform:translateX(-28%)}
