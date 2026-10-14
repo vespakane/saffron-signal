@@ -13,7 +13,9 @@
 <style>
 /* Every position below is measured from the reference screenshots (1206x2622 @3x -> 402x874pt). 1 CSS px = 1pt. */
 :root{
-  --top:env(safe-area-inset-top,0px);   /* where the phone status bar ends; 59px inside the desktop iPhone frame */
+  --inset:env(safe-area-inset-top,0px); /* where the phone status bar ends; 59px inside the desktop iPhone frame */
+  --top:var(--inset);                   /* y where each screen's content starts */
+  --glass:40px;                         /* how far iOS 26's status-bar blur reaches below the inset; the chat header is kept out of it */
   --white:#ffffff;
   --bar:#faf7f1;      /* WhatsApp header band colour (sampled from the real app) - app base background */
   --beige:#f3f1eb;
@@ -44,14 +46,15 @@ img{display:block;user-select:none;-webkit-user-select:none}
   body{background:#161616}
   #phone{left:50%;top:50%;width:402px;height:874px;transform:translate(-50%,-50%) scale(var(--scale,1));transform-origin:center}
   #phone::before{content:"";position:absolute;inset:-14px;border-radius:69px;background:#101010;box-shadow:0 0 0 2px #2a2a2a,0 30px 80px rgba(0,0,0,.6)}
-  #app{border-radius:55px;--top:59px}
+  #app{border-radius:55px;--inset:59px}
   .island{position:absolute;left:50%;top:11px;width:126px;height:37px;border-radius:19px;background:#000;transform:translateX(-50%);z-index:30;pointer-events:none}
 }
 .screen{position:absolute;inset:0;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
 /* opaque, position:fixed, full-width box over the top edge: iOS 26+ then skips its Liquid Glass status-bar blur and shows this colour instead */
-#safe-top{position:fixed;left:0;top:0;width:100%;height:var(--top);background:var(--bar);z-index:20;pointer-events:none}
+#safe-top{position:fixed;left:0;top:0;width:100%;height:var(--inset);background:var(--bar);z-index:20;pointer-events:none;transition:height .32s cubic-bezier(.2,.8,.2,1)}
+#app.in-chat #safe-top{height:calc(var(--inset) + var(--glass))}
 #list{background:var(--bar)}
-#chat{background:var(--beige);transform:translateX(100%)}
+#chat{background:var(--beige);transform:translateX(100%);--top:calc(var(--inset) + var(--glass))}
 #app.in-chat #chat{transform:none}
 #app.in-chat #list{transform:translateX(-28%)}
 @media (prefers-reduced-motion:reduce){.screen{transition:none}}
