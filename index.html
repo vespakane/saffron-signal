@@ -47,6 +47,8 @@ img{display:block;user-select:none;-webkit-user-select:none}
   .island{position:absolute;left:50%;top:11px;width:126px;height:37px;border-radius:19px;background:#000;transform:translateX(-50%);z-index:30;pointer-events:none}
 }
 .screen{position:absolute;inset:0;transition:transform .32s cubic-bezier(.2,.8,.2,1)}
+/* solid white under the phone status bar so iOS 26 has nothing to blur/glass over there */
+#safe-top{position:absolute;left:0;right:0;top:0;height:var(--top);background:var(--white);z-index:20;pointer-events:none}
 #list{background:var(--white)}
 #chat{background:var(--beige);transform:translateX(100%)}
 #app.in-chat #chat{transform:none}
@@ -204,6 +206,7 @@ img{display:block;user-select:none;-webkit-user-select:none}
 <body>
 <div id="stage"><div id="phone"><div id="app">
   <div class="island"></div>
+  <div id="safe-top"></div>
 
   <!-- ===== Chats list ===== -->
   <section class="screen" id="list">
